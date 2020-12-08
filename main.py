@@ -1,163 +1,101 @@
 from art import logo
 from database import *
 
+money = 0
 
-def coffee_machine():
-    # Menu, ingredients and costs
-    # Espresso:
-    espresso_water = MENU["espresso"]["ingredients"]["water"]
-    espresso_coffee = MENU["espresso"]["ingredients"]["coffee"]
-    espresso_cost = MENU["espresso"]["cost"]
-    # Latte:
-    latte_water = MENU["latte"]["ingredients"]["water"]
-    latte_milk = MENU["latte"]["ingredients"]["milk"]
-    latte_coffee = MENU["latte"]["ingredients"]["coffee"]
-    latte_cost = MENU["latte"]["cost"]
-    # Cappuccino:
-    cappuccino_water = MENU["cappuccino"]["ingredients"]["water"]
-    cappuccino_milk = MENU["cappuccino"]["ingredients"]["milk"]
-    cappuccino_coffee = MENU["cappuccino"]["ingredients"]["coffee"]
-    cappuccino_cost = MENU["cappuccino"]["cost"]
 
-    # Coffee machine's money
-    MONEY = 0
+def machine_resources():
+    resources_info = f" Water: {resources['water']}ml\n Milk: {resources['milk']}ml\n Coffee: {resources['coffee']}gr\n Money: ${money}"
+    return resources_info
 
-    # Coffee machine's resources
-    WATER = resources["water"]
-    MILK = resources["milk"]
-    COFFEE = resources["coffee"]
 
-    # Automatic message after choosing drink
-    MESSAGE = "Please insert coins."
+def is_resource_sufficient(drink):
+    if MENU[drink]["ingredients"]["water"] > resources["water"] or MENU[drink]["ingredients"]["milk"] > resources["milk"] or MENU[drink]["ingredients"]["coffee"] > resources["coffee"]:
+        print(
+            f"Sorry, there are not enough resources in the machine. Please contact the admin to refill it.")
+        return False
+    else:
+        print(f"The {drink} is ${MENU[drink]['cost']}")
+        return True
 
-    time_break = True
 
-    # user choice
-    while time_break and WATER > 0 or MILK > 0 or COFFEE > 0:
-        choice = input(
-            "What would you like? (espresso/latte/cappuccino) ").lower()
-        if choice == "report":
-            print(
-                f"The machine has:\n Water: {WATER}ml\n Milk: {MILK}ml\n Coffee: {COFFEE}gr\n Money: ${MONEY}")
-        elif choice == "espresso":
-            # tell user drink's cost
-            print(f"The espresso is {espresso_cost}\n")
-            # current money inserted for drink
-            money_inserted = 0
-            # ask to enter coins
-            print(MESSAGE)
-            quarters = int(input("How many quarters? "))
-            for quarter in range(quarters):
-                money_inserted += 0.25
-            dimes = int(input("How many dimes? "))
-            for dime in range(dimes):
-                money_inserted += 0.10
-            nickels = int(input("How many nickels? "))
-            for nickel in range(nickels):
-                money_inserted += 0.05
-            pennies = int(input("How many pennies? "))
-            for penny in range(pennies):
-                money_inserted += 0.01
-            # logic
-            if money_inserted < espresso_cost:
-                print(
-                    f"Sorry, you did not enter the correct amount here's your money {money_inserted}\n")
-            elif WATER <= 0 or COFFEE <= 0:
-                print(
-                    f"Sorry, the machine is out of resources. Here's your money {money_inserted}\n")
-                return
-            elif money_inserted == espresso_cost and WATER >= 0 or COFFEE >= 0:
-                MONEY += money_inserted
-                WATER -= espresso_water
-                COFFEE -= espresso_coffee
-                print("Enjoy your espresso! ☕\n")
-                if money_inserted > espresso_cost:
-                    change = money_inserted % espresso_cost
-                    MONEY -= change
-                    print(f"Here's your change, {change}\n")
+def subtract_resources(drink):
+    resources["water"] -= MENU[drink]["ingredients"]["water"]
+    resources["milk"] -= MENU[drink]["ingredients"]["milk"]
+    resources["coffee"] -= MENU[drink]["ingredients"]["coffee"]
+    return resources
 
-        elif choice == "latte":
-            # tell user drink's cost
-            print(f"The latte is {latte_cost}\n")
-            # current money inserted for drink
-            money_inserted = 0
-            # ask to enter coins
-            print(MESSAGE)
-            quarters = int(input("How many quarters? "))
-            for quarter in range(quarters):
-                money_inserted += 0.25
-            dimes = int(input("How many dimes? "))
-            for dime in range(dimes):
-                money_inserted += 0.10
-            nickels = int(input("How many nickels? "))
-            for nickel in range(nickels):
-                money_inserted += 0.05
-            pennies = int(input("How many pennies? "))
-            for penny in range(pennies):
-                money_inserted += 0.01
-            # logic
-            if money_inserted < latte_cost:
-                print(
-                    f"Sorry, you did not enter the correct amount here's your money {money_inserted}\n")
-            elif WATER <= 0 or MILK <= 0 or COFFEE <= 0:
-                print(
-                    f"Sorry, the machine is out of resources. Here's your money {money_inserted}\n")
-                return
-            elif money_inserted == latte_cost and WATER >= 0 or MILK >= 0 or COFFEE >= 0:
-                MONEY += money_inserted
-                WATER -= latte_water
-                MILK -= latte_milk
-                COFFEE -= latte_coffee
-                print("Enjoy your latte! 🥛\n")
-                if money_inserted > latte_cost:
-                    change = money_inserted % latte_cost
-                    MONEY -= change
-                    print(f"Here's your change, {change}\n")
 
-        elif choice == "cappuccino":
-            # tell user drink's cost
-            print(f"The cappuccino is {cappuccino_cost}\n")
-            # current money inserted for drink
-            money_inserted = 0
-            # ask to enter coins
-            print(MESSAGE)
-            quarters = int(input("How many quarters? "))
-            for quarter in range(quarters):
-                money_inserted += 0.25
-            dimes = int(input("How many dimes? "))
-            for dime in range(dimes):
-                money_inserted += 0.10
-            nickels = int(input("How many nickels? "))
-            for nickel in range(nickels):
-                money_inserted += 0.05
-            pennies = int(input("How many pennies? "))
-            for penny in range(pennies):
-                money_inserted += 0.01
-            # logic
-            if money_inserted < cappuccino_cost:
-                print(
-                    f"Sorry, you did not enter the correct amount here's your money {money_inserted}\n")
-            elif WATER <= 0 or MILK <= 0 or COFFEE <= 0:
-                print(
-                    f"Sorry, the machine is out of resources. Here's your money {money_inserted}\n")
-                return
-            elif money_inserted == cappuccino_cost and WATER >= 0 or MILK >= 0 or COFFEE >= 0:
-                MONEY += money_inserted
-                WATER -= cappuccino_water
-                MILK -= cappuccino_milk
-                COFFEE -= cappuccino_coffee
-                print("Enjoy your cappuccino! ☕\n")
-                if money_inserted > cappuccino_cost:
-                    change = money_inserted % cappuccino_cost
-                    MONEY -= change
-                    print(f"Here's your change, {change}\n")
+def insert_money():
+    print("Please insert coins: ")
+    total = int(input("How many quarters? ")) * 0.25
+    total += int(input("How many dimes? ")) * 0.15
+    total += int(input("How many nickels? ")) * 0.5
+    total += int(input("How many pennies? ")) * 0.1
+    return total
 
-        answer = input("Do you want another drink? Choose 'y' or 'n': ")
-        if answer == "n":
-            time_break = False
+
+def refill_machine():
+    for resource in resources:
+        resources[resource] += 100
+    return resources
 
 
 print(logo)
 
-
-coffee_machine()
+is_on = True
+while is_on:
+    choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
+    if choice == "off":
+        print("Machine is turning off...")
+        is_on = False
+    elif choice == "report":
+        print(machine_resources())
+    elif choice == "refill":
+        refill_machine()
+        print("Machine's resources have been refilled. Choose 'report' to check status.")
+    elif choice == "espresso" and is_resource_sufficient("espresso"):
+        insert = insert_money()
+        if insert == MENU['espresso']['cost']:
+            subtract_resources("espresso")
+            money += insert
+            print("Enjoy your espresso! ☕")
+        elif insert < MENU['espresso']['cost']:
+            print(
+                f"Sorry, you have not entered the right amount. here's your money {insert}")
+        elif insert > MENU['espresso']['cost']:
+            subtract_resources("espresso")
+            change = insert - MENU['espresso']['cost']
+            money += MENU['espresso']['cost']
+            print(f"Here's your change {change}.")
+            print("Enjoy your espresso! ☕")
+    elif choice == "latte" and is_resource_sufficient("latte"):
+        insert = insert_money()
+        if insert == MENU['latte']['cost']:
+            subtract_resources("latte")
+            money += insert
+            print("Enjoy your latte! 🥛")
+        elif insert < MENU['latte']['cost']:
+            print(
+                f"Sorry, you have not entered the right amount. here's your money {insert}")
+        elif insert > MENU['latte']['cost']:
+            subtract_resources("latte")
+            change = insert - MENU['latte']['cost']
+            money += MENU['latte']['cost']
+            print(f"Here's your change {change}.")
+            print("Enjoy your latte! 🥛")
+    elif choice == "cappuccino" and is_resource_sufficient("cappuccino"):
+        insert = insert_money()
+        if insert == MENU['cappuccino']['cost']:
+            subtract_resources("cappuccino")
+            money += insert
+            print("Enjoy your cappuccino! ☕")
+        elif insert < MENU['cappuccino']['cost']:
+            print(
+                f"Sorry, you have not entered the right amount. here's your money {insert}")
+        elif insert > MENU['cappuccino']['cost']:
+            subtract_resources("cappuccino")
+            change = insert - MENU['cappuccino']['cost']
+            money += MENU['cappuccino']['cost']
+            print(f"Here's your change {change}.")
+            print("Enjoy your cappuccino! ☕")
