@@ -21,9 +21,8 @@ def is_resource_sufficient(drink):
 
 
 def subtract_resources(drink):
-    resources["water"] -= MENU[drink]["ingredients"]["water"]
-    resources["milk"] -= MENU[drink]["ingredients"]["milk"]
-    resources["coffee"] -= MENU[drink]["ingredients"]["coffee"]
+    for item in MENU[drink]["ingredients"]:
+        resources[item] -= MENU[drink]["ingredients"][item]
     return resources
 
 
@@ -32,7 +31,7 @@ def insert_money():
     total = int(input("How many quarters? ")) * 0.25
     total += int(input("How many dimes? ")) * 0.15
     total += int(input("How many nickels? ")) * 0.5
-    total += int(input("How many pennies? \n")) * 0.1
+    total += int(input("How many pennies? ")) * 0.1
     return total
 
 
