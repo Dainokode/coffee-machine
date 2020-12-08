@@ -33,7 +33,7 @@ def coffee_machine():
     time_break = True
 
     # user choice
-    while time_break:
+    while time_break and WATER > 0 or MILK > 0 or COFFEE > 0:
         choice = input(
             "What would you like? (espresso/latte/cappuccino) ").lower()
         if choice == "report":
@@ -62,7 +62,11 @@ def coffee_machine():
             if money_inserted < espresso_cost:
                 print(
                     f"Sorry, you did not enter the correct amount here's your money {money_inserted}\n")
-            elif money_inserted == espresso_cost and WATER != 0 or COFFEE != 0:
+            elif WATER <= 0 or COFFEE <= 0:
+                print(
+                    f"Sorry, the machine is out of resources. Here's your money {money_inserted}\n")
+                return
+            elif money_inserted == espresso_cost and WATER >= 0 or COFFEE >= 0:
                 MONEY += money_inserted
                 WATER -= espresso_water
                 COFFEE -= espresso_coffee
@@ -71,10 +75,7 @@ def coffee_machine():
                     change = money_inserted % espresso_cost
                     MONEY -= change
                     print(f"Here's your change, {change}\n")
-            elif WATER == 0 or COFFEE == 0:
-                print(
-                    f"Sorry, the machine is out of resources. Here's your money {money_inserted}\n")
-                time_break = False
+
         elif choice == "latte":
             # tell user drink's cost
             print(f"The latte is {latte_cost}\n")
@@ -98,7 +99,11 @@ def coffee_machine():
             if money_inserted < latte_cost:
                 print(
                     f"Sorry, you did not enter the correct amount here's your money {money_inserted}\n")
-            elif money_inserted == latte_cost and WATER != 0 or MILK != 0 or COFFEE != 0:
+            elif WATER <= 0 or MILK <= 0 or COFFEE <= 0:
+                print(
+                    f"Sorry, the machine is out of resources. Here's your money {money_inserted}\n")
+                return
+            elif money_inserted == latte_cost and WATER >= 0 or MILK >= 0 or COFFEE >= 0:
                 MONEY += money_inserted
                 WATER -= latte_water
                 MILK -= latte_milk
@@ -108,10 +113,7 @@ def coffee_machine():
                     change = money_inserted % latte_cost
                     MONEY -= change
                     print(f"Here's your change, {change}\n")
-            elif WATER == 0 or MILK == 0 or COFFEE == 0:
-                print(
-                    f"Sorry, the machine is out of resources. Here's your money {money_inserted}\n")
-                time_break = False
+
         elif choice == "cappuccino":
             # tell user drink's cost
             print(f"The cappuccino is {cappuccino_cost}\n")
@@ -135,7 +137,11 @@ def coffee_machine():
             if money_inserted < cappuccino_cost:
                 print(
                     f"Sorry, you did not enter the correct amount here's your money {money_inserted}\n")
-            elif money_inserted == cappuccino_cost and WATER != 0 or MILK != 0 or COFFEE != 0:
+            elif WATER <= 0 or MILK <= 0 or COFFEE <= 0:
+                print(
+                    f"Sorry, the machine is out of resources. Here's your money {money_inserted}\n")
+                return
+            elif money_inserted == cappuccino_cost and WATER >= 0 or MILK >= 0 or COFFEE >= 0:
                 MONEY += money_inserted
                 WATER -= cappuccino_water
                 MILK -= cappuccino_milk
@@ -145,10 +151,7 @@ def coffee_machine():
                     change = money_inserted % cappuccino_cost
                     MONEY -= change
                     print(f"Here's your change, {change}\n")
-            elif WATER == 0 or MILK == 0 or COFFEE == 0:
-                print(
-                    f"Sorry, the machine is out of resources. Here's your money {money_inserted}\n")
-                time_break = False
+
         answer = input("Do you want another drink? Choose 'y' or 'n': ")
         if answer == "n":
             time_break = False
